@@ -87,12 +87,12 @@ function Lobby() {
                 onMouseEnter={playHoverSound}
                 className="horror-btn text-lg px-8 py-5"
                 style={{
-                  borderColor: isMuted ? 'rgba(74, 158, 74, 0.6)' : 'rgba(255, 60, 60, 0.6)',
-                  color: isMuted ? '#4ea366' : '#ff4d4d'
+                  borderColor: !isMuted ? 'rgba(74, 158, 74, 0.6)' : 'rgba(255, 60, 60, 0.6)',
+                  color: !isMuted ? '#4ea366' : '#ff4d4d'
                 }}
                 title={micError || 'Toggle Microphone'}
               >
-                {isMuted ? 'Mic On' : 'Mic Off'}
+                {!isMuted ? 'Mic On' : 'Mic Off'}
               </button>
 
               {/* Ready / Unready */}

@@ -78,11 +78,11 @@ export default function GameScreen() {
           <button
             onClick={toggleMute}
             className={`text-xs px-3 py-1 border rounded transition-colors ${
-              isMuted ? 'text-green-400 border-green-500/50 bg-green-500/10' : 'text-red-400 border-red-500/50 bg-red-500/10'
+              !isMuted ? 'text-green-400 border-green-500/50 bg-green-500/10' : 'text-red-400 border-red-500/50 bg-red-500/10'
             }`}
             title={micError || 'Toggle Microphone'}
           >
-            {isMuted ? '[MIC ON]' : '[MIC OFF]'}
+            {!isMuted ? '[MIC ON]' : '[MIC OFF]'}
           </button>
           <button
             onClick={() => {
