@@ -63,7 +63,10 @@ DO NOT include any markdown formatting, markdown blocks, or plain text outside t
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true'
+      },
       body: JSON.stringify({
         model: 'llama3.2',
         prompt: prompt,
@@ -73,11 +76,16 @@ DO NOT include any markdown formatting, markdown blocks, or plain text outside t
     });
 
     if (!response.ok) {
-      throw new Error(`Ollama error: ${response.statusText}`);
+      throw new Error(`Ollama error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
-    return JSON.parse(data.response);
+    try {
+      return JSON.parse(data.response);
+    } catch (parseError) {
+      console.error('Failed to parse JSON from Ollama. Raw response:', data.response);
+      throw parseError;
+    }
   } catch (error) {
     console.error('Error generating mystery from Llama 3.2:', error);
     // Return a fallback mystery if generation fails
