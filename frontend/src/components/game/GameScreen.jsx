@@ -57,7 +57,7 @@ export default function GameScreen() {
       className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 overflow-hidden flex flex-col"
     >
       {/* Header */}
-      <header className="p-4 md:p-6 border-b border-[color:var(--color-blood-dark)] flex justify-between items-start md:items-center gap-4 bg-black/80">
+      <header className="p-6 md:p-8 border-b border-[color:var(--color-blood-dark)] flex justify-between items-start md:items-center gap-6 bg-black/80">
         <div className="flex-1 min-w-0 pr-4">
           <h1 className="game-title text-xl md:text-3xl truncate">
             {mystery.victim.name} is dead.
@@ -103,7 +103,7 @@ export default function GameScreen() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 py-3 text-sm tracking-widest uppercase font-[family-name:var(--font-family-heading)] transition-all ${
+            className={`flex-1 py-4 md:py-5 text-sm md:text-base tracking-widest uppercase font-[family-name:var(--font-family-heading)] transition-all ${
               activeTab === tab.id
                 ? 'text-[color:var(--color-blood-glow)] border-b-2 border-[color:var(--color-blood)] bg-[color:var(--color-crimson)] bg-opacity-20'
                 : 'text-[color:var(--color-bone-dark)] hover:text-[color:var(--color-bone)] hover:bg-white/5'
@@ -125,31 +125,31 @@ export default function GameScreen() {
               exit={{ opacity: 0, y: -10 }}
               className="w-full max-w-3xl mx-auto space-y-8"
             >
-              <div className="text-center mb-10">
-                <h2 className="font-[family-name:var(--font-family-heading)] text-[color:var(--color-gold-dim)] tracking-widest uppercase mb-2">You are</h2>
-                <h1 className="game-title text-3xl md:text-5xl break-words leading-tight">{myRole?.name}</h1>
-                <p className="game-subtitle text-lg md:text-xl mt-3">{myRole?.age} yrs • {myRole?.occupation}</p>
+              <div className="text-center mb-14 mt-4">
+                <h2 className="font-[family-name:var(--font-family-heading)] text-[color:var(--color-gold-dim)] tracking-widest uppercase mb-4 text-base">You are</h2>
+                <h1 className="game-title text-4xl md:text-6xl break-words leading-tight">{myRole?.name}</h1>
+                <p className="game-subtitle text-xl md:text-2xl mt-4">{myRole?.age} yrs • {myRole?.occupation}</p>
               </div>
 
-              <div className="space-y-6">
-                <section className="panel rounded">
-                  <h3 className="panel-header mb-3">Public Background</h3>
-                  <p className="px-5 pb-5 md:px-6 md:pb-6 leading-relaxed break-words whitespace-pre-wrap text-[color:var(--color-bone)] text-lg">{myRole?.publicBackground}</p>
+              <div className="space-y-10">
+                <section className="panel rounded overflow-hidden shadow-lg">
+                  <h3 className="panel-header text-lg">Public Background</h3>
+                  <p className="p-6 md:p-8 leading-loose break-words whitespace-pre-wrap text-[color:var(--color-bone)] text-xl">{myRole?.publicBackground}</p>
                 </section>
 
-                <section className="panel rounded border-[color:var(--color-blood)]">
-                  <h3 className="panel-header bg-[color:var(--color-crimson)] bg-opacity-20 border-[color:var(--color-blood)] mb-3 text-[color:var(--color-blood-glow)]">Private Objective</h3>
-                  <p className="px-5 pb-5 md:px-6 md:pb-6 leading-relaxed text-gray-300 break-words whitespace-pre-wrap text-lg">{myRole?.privateObjective}</p>
+                <section className="panel rounded overflow-hidden shadow-lg border border-[color:var(--color-blood-dark)]">
+                  <h3 className="panel-header text-lg bg-[color:var(--color-crimson)] bg-opacity-20 border-b border-[color:var(--color-blood-dark)] text-[color:var(--color-blood-glow)]">Private Objective</h3>
+                  <p className="p-6 md:p-8 leading-loose text-gray-300 break-words whitespace-pre-wrap text-xl">{myRole?.privateObjective}</p>
                 </section>
 
-                <section className="panel rounded">
-                  <h3 className="panel-header mb-3 text-[color:var(--color-moonlight)]">Hidden Information</h3>
-                  <p className="px-5 pb-5 md:px-6 md:pb-6 leading-relaxed break-words whitespace-pre-wrap text-[color:var(--color-bone)] text-lg">{myRole?.hiddenInformation}</p>
+                <section className="panel rounded overflow-hidden shadow-lg">
+                  <h3 className="panel-header text-lg text-[color:var(--color-moonlight)]">Hidden Information</h3>
+                  <p className="p-6 md:p-8 leading-loose break-words whitespace-pre-wrap text-[color:var(--color-bone)] text-xl">{myRole?.hiddenInformation}</p>
                 </section>
 
-                <section className="panel rounded">
-                  <h3 className="panel-header mb-3 text-[color:var(--color-moonlight)]">Secret Relationship</h3>
-                  <p className="px-5 pb-5 md:px-6 md:pb-6 leading-relaxed break-words whitespace-pre-wrap text-[color:var(--color-bone)] text-lg">{myRole?.secretRelationship}</p>
+                <section className="panel rounded overflow-hidden shadow-lg">
+                  <h3 className="panel-header text-lg text-[color:var(--color-moonlight)]">Secret Relationship</h3>
+                  <p className="p-6 md:p-8 leading-loose break-words whitespace-pre-wrap text-[color:var(--color-bone)] text-xl">{myRole?.secretRelationship}</p>
                 </section>
               </div>
             </motion.div>
@@ -163,8 +163,8 @@ export default function GameScreen() {
               exit={{ opacity: 0, y: -10 }}
               className="w-full max-w-3xl mx-auto"
             >
-              <h2 className="game-title text-2xl md:text-4xl mb-8 break-words">{mystery.location.name}</h2>
-              <p className="text-lg md:text-xl leading-relaxed text-[color:var(--color-bone)] border-l-2 border-[color:var(--color-blood)] pl-5 md:pl-8 py-2 break-words whitespace-pre-wrap">
+              <h2 className="game-title text-3xl md:text-5xl mb-10 break-words text-center mt-4">{mystery.location.name}</h2>
+              <p className="text-xl md:text-2xl leading-loose text-[color:var(--color-bone)] border-l-4 border-[color:var(--color-blood)] pl-6 md:pl-10 py-4 break-words whitespace-pre-wrap">
                 {mystery.location.description}
               </p>
             </motion.div>
@@ -179,18 +179,20 @@ export default function GameScreen() {
               className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6"
             >
               {otherSuspects.map((suspect, idx) => (
-                <div key={idx} className="panel p-5 md:p-6 rounded">
-                  <h3 className="game-title text-xl md:text-2xl mb-1 break-words">{suspect.name}</h3>
-                  <p className="game-subtitle text-sm mb-5 text-[color:var(--color-bone-dark)]">{suspect.age} yrs • {suspect.occupation}</p>
-                  
-                  <div className="space-y-4 text-base">
-                    <div>
-                      <span className="font-[family-name:var(--font-family-heading)] text-[color:var(--color-gold-dim)] uppercase tracking-wider text-xs block mb-1">Appearance</span>
-                      <p className="break-words whitespace-pre-wrap text-[color:var(--color-bone)]">{suspect.physicalDescription}</p>
-                    </div>
-                    <div>
-                      <span className="font-[family-name:var(--font-family-heading)] text-[color:var(--color-gold-dim)] uppercase tracking-wider text-xs block mb-1">Known Background</span>
-                      <p className="break-words whitespace-pre-wrap text-[color:var(--color-bone)]">{suspect.publicBackground}</p>
+                <div key={idx} className="panel rounded overflow-hidden shadow-lg">
+                  <div className="p-6 md:p-8">
+                    <h3 className="game-title text-2xl md:text-3xl mb-2 break-words">{suspect.name}</h3>
+                    <p className="game-subtitle text-base mb-8 text-[color:var(--color-bone-dark)]">{suspect.age} yrs • {suspect.occupation}</p>
+                    
+                    <div className="space-y-8 text-lg">
+                      <div>
+                        <span className="font-[family-name:var(--font-family-heading)] text-[color:var(--color-gold-dim)] uppercase tracking-wider text-sm block mb-2">Appearance</span>
+                        <p className="break-words whitespace-pre-wrap text-[color:var(--color-bone)] leading-relaxed">{suspect.physicalDescription}</p>
+                      </div>
+                      <div>
+                        <span className="font-[family-name:var(--font-family-heading)] text-[color:var(--color-gold-dim)] uppercase tracking-wider text-sm block mb-2">Known Background</span>
+                        <p className="break-words whitespace-pre-wrap text-[color:var(--color-bone)] leading-relaxed">{suspect.publicBackground}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -208,13 +210,13 @@ export default function GameScreen() {
             >
               {/* Timeline */}
               <div>
-                <h3 className="game-title text-2xl mb-6 border-b border-[color:var(--color-blood-dark)] pb-3">Timeline</h3>
-                <div className="space-y-6">
+                <h3 className="game-title text-3xl mb-8 border-b border-[color:var(--color-blood-dark)] pb-4">Timeline</h3>
+                <div className="space-y-10 mt-6">
                   {mystery.timeline.map((event, idx) => (
-                    <div key={idx} className="relative pl-8 border-l-2 border-[color:var(--color-blood-dark)]">
-                      <div className="absolute w-3 h-3 bg-[color:var(--color-blood-glow)] rounded-full -left-[7px] top-1.5 shadow-[0_0_10px_var(--color-blood)]" />
-                      <span className="font-[family-name:var(--font-family-heading)] text-[color:var(--color-gold)] text-sm tracking-wider block mb-2 break-words">{event.time}</span>
-                      <p className="text-lg text-[color:var(--color-bone)] break-words whitespace-pre-wrap">{event.event}</p>
+                    <div key={idx} className="relative pl-10 border-l-2 border-[color:var(--color-blood-dark)] py-1">
+                      <div className="absolute w-4 h-4 bg-[color:var(--color-blood-glow)] rounded-full -left-[9px] top-2 shadow-[0_0_15px_var(--color-blood)]" />
+                      <span className="font-[family-name:var(--font-family-heading)] text-[color:var(--color-gold)] text-base tracking-widest block mb-3 break-words">{event.time}</span>
+                      <p className="text-xl text-[color:var(--color-bone)] break-words whitespace-pre-wrap leading-relaxed">{event.event}</p>
                     </div>
                   ))}
                 </div>
@@ -222,12 +224,12 @@ export default function GameScreen() {
 
               {/* Clues */}
               <div>
-                <h3 className="game-title text-2xl mb-6 border-b border-[color:var(--color-blood-dark)] pb-3">Initial Clues</h3>
-                <div className="space-y-5">
+                <h3 className="game-title text-3xl mb-8 border-b border-[color:var(--color-blood-dark)] pb-4">Initial Clues</h3>
+                <div className="space-y-8 mt-6">
                   {mystery.initialClues.map((clue, idx) => (
-                    <div key={idx} className="panel rounded overflow-hidden">
-                      <h4 className="panel-header mb-3">{clue.name}</h4>
-                      <p className="px-5 pb-5 md:px-6 md:pb-6 text-lg text-[color:var(--color-bone)] break-words whitespace-pre-wrap">{clue.description}</p>
+                    <div key={idx} className="panel rounded overflow-hidden shadow-lg">
+                      <h4 className="panel-header text-lg">{clue.name}</h4>
+                      <p className="p-6 md:p-8 text-xl text-[color:var(--color-bone)] break-words whitespace-pre-wrap leading-relaxed">{clue.description}</p>
                     </div>
                   ))}
                 </div>
