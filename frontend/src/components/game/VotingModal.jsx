@@ -75,7 +75,7 @@ export default function VotingModal() {
           style={{
             maxHeight: '90vh',
             overflow: 'hidden',
-            border: '1px solid rgba(255,255,255,0.08)',
+            border: '1px solid rgba(255,255,255,0.08)'
           }}
         >
           {/* Header */}
