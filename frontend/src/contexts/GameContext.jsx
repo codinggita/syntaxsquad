@@ -14,6 +14,10 @@ const initialState = {
   ping: 0,
   countdown: null,
   kicked: false,
+  // Private chat state
+  privateChatRequest: null, // { fromPlayerId, fromPlayerName, toPlayerId }
+  activePrivateChat: null, // { otherPlayerId, otherPlayerName }
+  privateMessages: [], // Array of { fromPlayerId, toPlayerId, fromPlayerName, content, timestamp }
   // ── Phase 6/7 state ──
   accusation: null,       // { accuserId, accusedId, accuserName, accusedName, defense }
   votingPhase: null,      // { isActive, timeLimit, votesCast, suspects }
@@ -66,6 +70,20 @@ function gameReducer(state, action) {
       return {
         ...state,
         room: { ...state.room, messages: [...existingMsgs, action.payload] }
+      };
+    // Private chat actions
+    case 'SET_PRIVATE_CHAT_REQUEST':
+      return { ...state, privateChatRequest: action.payload };
+    case 'CLEAR_PRIVATE_CHAT_REQUEST':
+      return { ...state, privateChatRequest: null };
+    case 'START_PRIVATE_CHAT':
+      return { ...state, activePrivateChat: action.payload, privateChatRequest: null };
+    case 'END_PRIVATE_CHAT':
+      return { ...state, activePrivateChat: null };
+    case 'ADD_PRIVATE_MESSAGE':
+      return {
+        ...state,
+        privateMessages: [...state.privateMessages, action.payload]
       };
     // ── Phase 6/7 actions ──
     case 'SET_ACCUSATION':
@@ -146,7 +164,24 @@ export function GameProvider({ children }) {
     });
 
     socket.on('chat-message', (message) => {
+      console.log('[GameContext] chat-message received:', message);
       dispatch({ type: 'ADD_CHAT_MESSAGE', payload: message });
+    });
+
+    // Private chat events
+    socket.on('private-chat-request', (data) => {
+      console.log('[GameContext] private-chat-request received:', data);
+      dispatch({ type: 'SET_PRIVATE_CHAT_REQUEST', payload: data });
+    });
+
+    socket.on('private-chat-started', (data) => {
+      console.log('[GameContext] private-chat-started received:', data);
+      dispatch({ type: 'START_PRIVATE_CHAT', payload: data });
+    });
+
+    socket.on('private-message', (message) => {
+      console.log('[GameContext] private-message received:', message);
+      dispatch({ type: 'ADD_PRIVATE_MESSAGE', payload: message });
     });
 
     // ── Phase 6: Accusation & Voting ──
@@ -216,6 +251,9 @@ export function GameProvider({ children }) {
       socket.off('kicked');
       socket.off('room-closed');
       socket.off('chat-message');
+      socket.off('private-chat-request');
+      socket.off('private-chat-started');
+      socket.off('private-message');
       socket.off('player:accused');
       socket.off('player:defended');
       socket.off('voting:started');
@@ -355,6 +393,66 @@ export function GameProvider({ children }) {
     dispatch({ type: 'RESET' });
   }, [state.roomCode, state.playerId]);
 
+  // Private chat actions
+  const requestPrivateChat = useCallback((toPlayerId) => {
+    console.log('[GameContext] requestPrivateChat called with:', toPlayerId, {
+      roomCode: state.roomCode,
+      fromPlayerId: state.playerId,
+      toPlayerId,
+      fromPlayerName: state.playerName
+    });
+    socket.emit('request-private-chat', {
+      roomCode: state.roomCode,
+      fromPlayerId: state.playerId,
+      toPlayerId,
+      fromPlayerName: state.playerName
+    });
+  }, [state.roomCode, state.playerId, state.playerName]);
+
+  const acceptPrivateChat = useCallback((fromPlayerId, fromPlayerName) => {
+    console.log('[GameContext] acceptPrivateChat called with:', fromPlayerId, fromPlayerName);
+    socket.emit('accept-private-chat', {
+      roomCode: state.roomCode,
+      fromPlayerId,
+      toPlayerId: state.playerId,
+      toPlayerName: state.playerName
+    });
+  }, [state.roomCode, state.playerId, state.playerName]);
+
+  const rejectPrivateChat = useCallback(() => {
+    console.log('[GameContext] rejectPrivateChat called');
+    dispatch({ type: 'CLEAR_PRIVATE_CHAT_REQUEST' });
+  }, []);
+
+  const sendPrivateMessage = useCallback((content) => {
+    console.log('[GameContext] sendPrivateMessage called with:', content);
+    if (!state.activePrivateChat) return;
+    socket.emit('private-message', {
+      roomCode: state.roomCode,
+      fromPlayerId: state.playerId,
+      toPlayerId: state.activePrivateChat.otherPlayerId,
+      fromPlayerName: state.playerName,
+      content
+    });
+    // Also add the message to our own local state
+    const newMessage = {
+      fromPlayerId: state.playerId,
+      toPlayerId: state.activePrivateChat.otherPlayerId,
+      fromPlayerName: state.playerName,
+      content,
+      timestamp: new Date()
+    };
+    console.log('[GameContext] Adding message to local state:', newMessage);
+    dispatch({
+      type: 'ADD_PRIVATE_MESSAGE',
+      payload: newMessage
+    });
+  }, [state.roomCode, state.playerId, state.playerName, state.activePrivateChat]);
+
+  const endPrivateChat = useCallback(() => {
+    dispatch({ type: 'END_PRIVATE_CHAT' });
+  }, []);
+
   // ── Phase 6 actions ──
   const accusePlayer = useCallback((accusedPlayerId) => {
     return new Promise((resolve) => {
@@ -443,6 +541,12 @@ export function GameProvider({ children }) {
       changeSettings,
       startGame,
       closeRoom,
+      // Private chat actions
+      requestPrivateChat,
+      acceptPrivateChat,
+      rejectPrivateChat,
+      sendPrivateMessage,
+      endPrivateChat,
       // Phase 6/7
       accusePlayer,
       submitDefense,

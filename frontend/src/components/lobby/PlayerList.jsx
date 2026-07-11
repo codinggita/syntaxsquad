@@ -3,6 +3,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from '../../contexts/GameContext.jsx';
 import { playClickSound, playHoverSound } from '../../audio/audioEngine.js';
 
+// Function to get cartoon avatar URL from DiceBear using player's avatar index
+function getAvatarUrl(avatarIndex, playerId) {
+  const styles = [
+    'adventurer',
+    'avataaars',
+    'fun-emoji',
+    'lorelei',
+    'notionists',
+    'personas',
+    'pixel-art',
+    'thumbs'
+  ];
+  const style = styles[avatarIndex % styles.length];
+  return `https://api.dicebear.com/9.x/${style}/svg?seed=${encodeURIComponent(playerId)}&backgroundColor=transparent`;
+}
+
 function PlayerList({ players, playerId, isHost, maxPlayers }) {
   const { actions } = useGame();
   const emptySlots = maxPlayers - players.length;
@@ -39,6 +55,15 @@ function PlayerList({ players, playerId, isHost, maxPlayers }) {
               }}
             >
               <div className="flex items-center gap-4">
+                {/* Avatar */}
+                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-stone-800 flex-shrink-0">
+                  <img
+                    src={getAvatarUrl(player.avatar ?? 0, player.playerId)}
+                    alt={player.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                
                 {/* Status Dot */}
                 <span
                   className="w-3 h-3 rounded-full flex-shrink-0"
